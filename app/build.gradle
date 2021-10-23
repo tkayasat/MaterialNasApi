@@ -16,7 +16,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("app.properties").newDataInputStream())
+        def nasaApiKey = properties.getProperty("NASA_API_KEY", "YTBHyjcS1Qk9IzKB0LZMYroC4n39ONawhRH21kgC")
+        it.buildConfigField "String", "NASA_API_KEY", nasaApiKey
+    }
 
     buildTypes {
         release {
