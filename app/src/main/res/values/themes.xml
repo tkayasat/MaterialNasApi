@@ -12,5 +12,27 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/orbitron</item>
     </style>
+
+    <style name="MyCoolStyle1" parent="Theme.Design.Light.NoActionBar">
+        <item name="colorPrimary">@color/color_gray</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">casual</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="MyCoolStyle2" parent="Theme.Design.Light.NoActionBar">
+        <item name="colorPrimary">@color/design_default_color_secondary_variant</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">casual</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>

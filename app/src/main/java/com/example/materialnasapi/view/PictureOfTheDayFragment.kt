@@ -36,7 +36,7 @@ class PictureOfTheDayFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
@@ -50,7 +50,10 @@ class PictureOfTheDayFragment : Fragment() {
             })
         }
         setBottomAppBar(view)
+        initChipGroup()
+    }
 
+    private fun initChipGroup() {
         chipGroupMainFragment.setOnCheckedChangeListener { chipGroupMainFragment, position ->
             chipGroupMainFragment.findViewById<Chip>(position)?.let {
                 Toast.makeText(context, "Выбран ${it.text}", Toast.LENGTH_SHORT).show()
@@ -65,9 +68,14 @@ class PictureOfTheDayFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.app_bar_fav -> toast("Favourite")
-            R.id.app_bar_settings -> activity?.supportFragmentManager?.beginTransaction()
-                ?.add(R.id.container, ChipsFragment())?.addToBackStack(null)?.commit()
+            R.id.app_bar_fav -> {
+                (activity as? MainActivity)?.changeTheme(R.style.MyCoolStyle1)
+            }
+            R.id.app_bar_settings -> {
+                (activity as? MainActivity)?.changeTheme(R.style.MyCoolStyle2)
+                toast("Favourite 2 ")
+//                activity?.supportFragmentManager?.beginTransaction()?.add(R.id.container, SettingsFragment())?.addToBackStack(null)?.commit()
+            }
             android.R.id.home -> {
                 activity?.let {
                     BottomNavigationDrawerFragment().show(it.supportFragmentManager, "tag")
@@ -88,7 +96,7 @@ class PictureOfTheDayFragment : Fragment() {
                 } else {
                     image_view.load(url) {
                         lifecycle(this@PictureOfTheDayFragment)
-                        error(R.drawable.ic_load_error_vector)
+                        kotlin.error(R.drawable.ic_load_error_vector)
                         placeholder(R.drawable.ic_no_photo_vector)
                     }
                 }
