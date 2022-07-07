@@ -9,6 +9,7 @@ import com.example.materialnasapi.R
 
 class WeatherFragment : Fragment() {
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,

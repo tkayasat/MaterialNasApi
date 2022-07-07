@@ -8,6 +8,7 @@ private const val EARTH_FRAGMENT = 0
 private const val MARS_FRAGMENT = 1
 private const val WEATHER_FRAGMENT = 2
 
+
 class ViewPagerAdapter(private val fragmentManager: FragmentManager) :
     FragmentStatePagerAdapter(fragmentManager) {
 
@@ -25,5 +26,9 @@ class ViewPagerAdapter(private val fragmentManager: FragmentManager) :
             2 -> fragments[WEATHER_FRAGMENT]
             else -> fragments[EARTH_FRAGMENT]
         }
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return null
     }
 }
