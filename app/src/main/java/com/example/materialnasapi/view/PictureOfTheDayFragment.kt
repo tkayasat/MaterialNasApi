@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import coil.load
 import com.example.materialnasapi.R
+import com.example.materialnasapi.api.ApiBottomActivity
 import com.example.materialnasapi.picture.PictureOfTheDayData
 import com.example.materialnasapi.picture.PictureOfTheDayViewModel
 import com.example.materialnasapi.ui.BottomNavigationDrawerFragment
@@ -68,14 +69,16 @@ class PictureOfTheDayFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.app_bar_fav -> {
-                (activity as? MainActivity)?.changeTheme(R.style.MyCoolStyle1)
+            R.id.app_bar_fav -> activity?.let {
+                startActivity(
+                    Intent(
+                        it,
+                        ApiBottomActivity::class.java
+                    )
+                )
             }
-            R.id.app_bar_settings -> {
-                (activity as? MainActivity)?.changeTheme(R.style.MyCoolStyle2)
-                toast("Favourite 2 ")
-//                activity?.supportFragmentManager?.beginTransaction()?.add(R.id.container, SettingsFragment())?.addToBackStack(null)?.commit()
-            }
+            R.id.app_bar_settings -> activity?.supportFragmentManager?.beginTransaction()
+                ?.add(R.id.container, ChipsFragment())?.addToBackStack(null)?.commit()
             android.R.id.home -> {
                 activity?.let {
                     BottomNavigationDrawerFragment().show(it.supportFragmentManager, "tag")
@@ -84,6 +87,7 @@ class PictureOfTheDayFragment : Fragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 
     private fun renderData(data: PictureOfTheDayData) {
         when (data) {
