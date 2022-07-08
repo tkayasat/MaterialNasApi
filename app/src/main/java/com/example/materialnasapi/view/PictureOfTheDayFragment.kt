@@ -12,7 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import coil.load
 import com.example.materialnasapi.R
+import com.example.materialnasapi.api.ApiActivity
 import com.example.materialnasapi.api.ApiBottomActivity
+import com.example.materialnasapi.api.CoordinatorLayout
 import com.example.materialnasapi.picture.PictureOfTheDayData
 import com.example.materialnasapi.picture.PictureOfTheDayViewModel
 import com.example.materialnasapi.ui.BottomNavigationDrawerFragment
@@ -39,7 +41,8 @@ class PictureOfTheDayFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        //return inflater.inflate(R.layout.fragment_main, container, false)
+        return inflater.inflate(R.layout.fragment_main_start, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +76,7 @@ class PictureOfTheDayFragment : Fragment() {
                 startActivity(
                     Intent(
                         it,
-                        ApiBottomActivity::class.java
+                        ApiActivity::class.java
                     )
                 )
             }
@@ -82,6 +85,14 @@ class PictureOfTheDayFragment : Fragment() {
                     Intent(
                         it,
                         ApiBottomActivity::class.java
+                    )
+                )
+            }
+            R.id.app_bar_coordinator_layout -> activity?.let {
+                startActivity(
+                    Intent(
+                        it,
+                        CoordinatorLayout::class.java
                     )
                 )
             }

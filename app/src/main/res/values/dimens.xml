@@ -5,4 +5,6 @@
     <dimen name="pod_description_text_size">18sp</dimen>
     <dimen name="pod_title_text_size">22sp</dimen>
     <dimen name="text_size_for_tab_icons">18sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>

@@ -6,18 +6,23 @@
         android:id="@+id/app_bar_fav"
         android:icon="@drawable/ic_show_fragments"
         android:title="@string/favourite"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/app_bar_change_style"
         android:icon="@drawable/ic_weather_space_icon"
         android:title="@string/favourite"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/app_bar_coordinator_layout"
+        android:icon="@drawable/ic_solar"
+        android:title="@string/coordinator"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/app_bar_settings"
         android:icon="@drawable/ic_settings_menu"
         android:title="@string/settings"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>
