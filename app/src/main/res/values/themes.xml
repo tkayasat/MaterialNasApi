@@ -13,6 +13,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/orbitron</item>
+        <item name="bottomNavigationStyle">@style/MyBottomNavigationStyle</item>
     </style>
 
     <style name="MyCoolStyle1" parent="Theme.Design.Light.NoActionBar">
@@ -33,6 +34,10 @@
         <item name="android:textStyle">normal</item>
         <item name="android:fontFamily">casual</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style
+        name="MyBottomNavigationStyle" parent="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface">
     </style>
 
 </resources>

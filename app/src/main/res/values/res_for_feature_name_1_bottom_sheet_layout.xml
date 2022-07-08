@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <color name="background">#663b4351</color>
-    <color name="textColor">#000</color>
+    <color name="textColor">#FF000000</color>
 
     <style name="feature_name_1_bottom_sheet_line_style">
         <item name="android:layout_width">25dp</item>
@@ -15,15 +14,12 @@
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
-        <item name="android:textColor">#000</item>
-
+        <item name="android:textColor">#FF000000</item>
     </style>
-
 
     <style name="feature_name_1_bottom_sheet_description">
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
-
     </style>
 
 </resources>
