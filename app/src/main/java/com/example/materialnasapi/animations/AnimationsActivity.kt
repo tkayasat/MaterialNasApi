@@ -1,4 +1,4 @@
-package com.example.materialnasapi.api
+package com.example.materialnasapi.animations
 
 import android.graphics.Rect
 import android.os.Build
