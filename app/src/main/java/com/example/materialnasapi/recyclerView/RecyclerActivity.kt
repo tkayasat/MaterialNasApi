@@ -9,6 +9,7 @@ class RecyclerActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityRecyclerBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecyclerBinding.inflate(layoutInflater)
@@ -16,6 +17,7 @@ class RecyclerActivity : AppCompatActivity() {
 
 
         val data = listOf(
+            Data("Header", ""),
             Data("Earth"),
             Data("Mars", ""),
             Data("Mars", ""),

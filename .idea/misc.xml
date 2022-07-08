@@ -42,6 +42,10 @@
         <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/activity_api_custom_tab_mars.xml" value="0.2921875" />
         <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/activity_api_custom_tab_weather.xml" value="0.2921875" />
         <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+        <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/activity_recycler.xml" value="0.29635416666666664" />
+        <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/activity_recycler_item_earth.xml" value="0.16041666666666668" />
+        <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/activity_recycler_item_header.xml" value="0.346875" />
+        <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/activity_recycler_item_mars.xml" value="0.29635416666666664" />
         <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/animation_explode_item.xml" value="0.31666666666666665" />
         <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/api_activity.xml" value="0.346875" />
         <entry key="..\:/Users/User/MaterialNasApi/app/src/main/res/layout/bottom_navigation_layout.xml" value="0.346875" />
