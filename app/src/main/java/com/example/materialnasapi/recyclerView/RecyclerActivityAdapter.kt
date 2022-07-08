@@ -10,7 +10,7 @@ import com.example.materialnasapi.databinding.ActivityRecyclerItemMarsBinding
 
 class RecyclerActivityAdapter(
     private var onListItemClickListener: OnListItemClickListener,
-    private val data: List<Data>,
+    private val data: MutableList<Data>,
 ) : RecyclerView.Adapter<BaseViewHolder>() {
 
 
@@ -34,7 +34,6 @@ class RecyclerActivityAdapter(
                     )
                 MarsViewHolder(binding.root)
             }
-
             else -> {
                 val binding: ActivityRecyclerItemHeaderBinding =
                     ActivityRecyclerItemHeaderBinding.inflate(
@@ -71,13 +70,32 @@ class RecyclerActivityAdapter(
         }
     }
 
+    fun appendItem() {
+        data.add(generateItem())
+        notifyItemInserted(itemCount - 1)
+    }
+
+    private fun generateItem() = Data("Mars", "")
+
     inner class MarsViewHolder(view: View) : BaseViewHolder(view) {
         override fun bind(data: Data) {
             ActivityRecyclerItemMarsBinding.bind(itemView).apply {
                 marsImageView.setOnClickListener {
                     onListItemClickListener.onItemClick(data)
                 }
+                addItemImageView.setOnClickListener { addItem() }
+                removeItemImageView.setOnClickListener { removeItem() }
             }
+        }
+
+        private fun addItem() {
+            data.add(layoutPosition, generateItem())
+            notifyItemInserted(layoutPosition)
+        }
+
+        private fun removeItem() {
+            data.removeAt(layoutPosition)
+            notifyItemRemoved(layoutPosition)
         }
     }
 
@@ -96,5 +114,4 @@ class RecyclerActivityAdapter(
         private const val TYPE_MARS = 1
         private const val TYPE_HEADER = 2
     }
-
 }

@@ -9,25 +9,16 @@ class RecyclerActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityRecyclerBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecyclerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        val data = listOf(
-            Data("Header", ""),
-            Data("Earth"),
-            Data("Mars", ""),
-            Data("Mars", ""),
-            Data("Mars", ""),
-            Data("Earth"),
-            Data("Earth"),
-            Data("Earth"),
+        val data = arrayListOf(
             Data("Mars", "")
         )
-        binding.recyclerView.adapter = RecyclerActivityAdapter(
+        data.add(0, Data("Header"))
+        val adapter = RecyclerActivityAdapter(
             object : OnListItemClickListener {
                 override fun onItemClick(data: Data) {
                     Toast.makeText(this@RecyclerActivity, data.someText, Toast.LENGTH_SHORT).show()
@@ -35,5 +26,8 @@ class RecyclerActivity : AppCompatActivity() {
 
             }, data
         )
+        binding.recyclerView.adapter = adapter
+        binding.recyclerActivityFAB.setOnClickListener { adapter.appendItem() }
+
     }
 }
