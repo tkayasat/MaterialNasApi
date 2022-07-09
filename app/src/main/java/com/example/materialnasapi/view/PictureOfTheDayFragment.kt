@@ -1,68 +1,143 @@
 package com.example.materialnasapi.view
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.*
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import coil.load
 import com.example.materialnasapi.R
 import com.example.materialnasapi.api.ApiActivity
 import com.example.materialnasapi.api.ApiBottomActivity
 import com.example.materialnasapi.api.CoordinatorLayout
-import com.example.materialnasapi.picture.PictureOfTheDayData
+import com.example.materialnasapi.databinding.FragmentMainBinding
+import com.example.materialnasapi.databinding.FragmentMainStartBinding
 import com.example.materialnasapi.picture.PictureOfTheDayViewModel
 import com.example.materialnasapi.ui.BottomNavigationDrawerFragment
-import com.example.materialnasapi.ui.chips.ChipsFragment
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.fragment_main.*
+
 
 class PictureOfTheDayFragment : Fragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
-    private val viewModel: PictureOfTheDayViewModel by lazy {
-        ViewModelProviders.of(this).get(PictureOfTheDayViewModel::class.java)
-    }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.getData()
-            .observe(viewLifecycleOwner, Observer<PictureOfTheDayData> { renderData(it) })
+    private var _binding: FragmentMainStartBinding? = null
+    val binding: FragmentMainStartBinding
+        get() {
+            return _binding!!
+        }
+
+    private val viewModel: PictureOfTheDayViewModel by lazy {
+        ViewModelProvider(this).get(PictureOfTheDayViewModel::class.java)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //return inflater.inflate(R.layout.fragment_main, container, false)
-        return inflater.inflate(R.layout.fragment_main_start, container, false)
+        _binding = FragmentMainStartBinding.inflate(inflater)
+        setActionBar()
+
+        return binding.root
+    }
+
+    private var isMain = true
+    private fun setActionBar() {
+        (context as MainActivity).setSupportActionBar(binding.bottomAppBar)
+        setHasOptionsMenu(true)
+        binding.fab.setOnClickListener {
+            if (isMain) {
+                isMain = false
+                binding.bottomAppBar.navigationIcon = null
+                binding.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
+                binding.fab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_back_fab
+                    )
+                )
+                binding.bottomAppBar.replaceMenu(R.menu.menu_bottom_bar_other_screen)
+            } else {
+                isMain = true
+                binding.bottomAppBar.navigationIcon =
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_hamburger_menu_bottom_bar
+                    )
+                binding.bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+                binding.fab.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_plus_fab
+                    )
+                )
+                binding.bottomAppBar.replaceMenu(R.menu.menu_bottom_bar)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBottomSheetBehavior(view.findViewById(R.id.bottom_sheet_container))
-        input_layout.setEndIconOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("https://en.wikipedia.org/wiki/${input_edit_text.text.toString()}")
-            })
+        viewModel.getData().observe(viewLifecycleOwner, Observer { renderData(it) })
+        viewModel.sendServerRequest()
+
+        binding.inputLayout.setEndIconOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW).apply {
+                data =
+                    Uri.parse("https://en.wikipedia.org/wiki/${binding.inputEditText.text.toString()}")
+            }
+            startActivity(i)
         }
-        setBottomAppBar(view)
-        initChipGroup()
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.includeLayout.bottomSheetContainer)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
-    private fun initChipGroup() {
-        chipGroupMainFragment.setOnCheckedChangeListener { chipGroupMainFragment, position ->
-            chipGroupMainFragment.findViewById<Chip>(position)?.let {
-                Toast.makeText(context, "Выбран ${it.text}", Toast.LENGTH_SHORT).show()
+    private fun renderData(data: AppState) {
+        when (data) {
+            is AppState.Error -> {
+                Toast.makeText(context, "AppState error", Toast.LENGTH_LONG).show()
+            }
+            is AppState.Loading -> {
+            }
+            is AppState.Success -> {
+                binding.imageView.load(data.serverResponseData.url) {
+                    kotlin.error(R.drawable.ic_load_error_vector)
+                }
+                data.serverResponseData.explanation?.let {
+                    val spannable = SpannableStringBuilder(it)
+
+                    spannable.setSpan(
+                        ForegroundColorSpan(resources.getColor(R.color.colorPrimary)),
+                        0,
+                        spannable.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    binding.includeLayoutTv.textViewForFonts.text = it
+                }
+             //   binding.includeLayoutTv.textViewForFonts.typeface =
+               //     Typeface.createFromAsset(requireContext().assets, "LongFox-o77A.ttf")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    companion object {
+        fun newInstance() = PictureOfTheDayFragment()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -71,108 +146,26 @@ class PictureOfTheDayFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         when (item.itemId) {
-            R.id.app_bar_fav -> activity?.let {
-                startActivity(
-                    Intent(
-                        it,
-                        ApiActivity::class.java
-                    )
-                )
+            R.id.app_bar_fav -> {
+                Toast.makeText(context, "Favorite", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(context, ApiActivity::class.java))
             }
-            R.id.app_bar_change_style -> activity?.let {
-                startActivity(
-                    Intent(
-                        it,
-                        ApiBottomActivity::class.java
-                    )
-                )
+
+            R.id.app_bar_change_style -> {
+                Toast.makeText(context, "Favorite", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(context, ApiBottomActivity::class.java))
             }
-            R.id.app_bar_coordinator_layout -> activity?.let {
-                startActivity(
-                    Intent(
-                        it,
-                        CoordinatorLayout::class.java
-                    )
-                )
+            R.id.app_bar_coordinator_layout -> {
+                startActivity(Intent(context, CoordinatorLayout::class.java))
             }
-            R.id.app_bar_settings -> activity?.supportFragmentManager?.beginTransaction()
-                ?.add(R.id.container, ChipsFragment())?.addToBackStack(null)?.commit()
+
             android.R.id.home -> {
-                activity?.let {
-                    BottomNavigationDrawerFragment().show(it.supportFragmentManager, "tag")
-                }
+                BottomNavigationDrawerFragment.newInstance()
+                    .show(requireActivity().supportFragmentManager, "")
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun renderData(data: PictureOfTheDayData) {
-        when (data) {
-            is PictureOfTheDayData.Success -> {
-
-                val serverResponseData = data.serverResponseData
-                val url = serverResponseData.url
-                if (url.isNullOrEmpty()) {
-                    toast("Link is empty")
-                } else {
-                    image_view.load(url) {
-                        lifecycle(this@PictureOfTheDayFragment)
-                        kotlin.error(R.drawable.ic_load_error_vector)
-                        placeholder(R.drawable.ic_no_photo_vector)
-                    }
-                }
-                loadingLayout.visibility = View.INVISIBLE
-                main.visibility = View.VISIBLE
-
-            }
-            is PictureOfTheDayData.Loading -> {
-                loadingLayout.visibility = View.VISIBLE
-                main.visibility = View.INVISIBLE
-
-            }
-            is PictureOfTheDayData.Error -> {
-                toast(data.error.message)
-            }
-        }
-    }
-
-    private fun setBottomAppBar(view: View) {
-        val context = activity as MainActivity
-        context.setSupportActionBar(view.findViewById(R.id.bottom_app_bar))
-        setHasOptionsMenu(true)
-        fab.setOnClickListener {
-            if (isMain) {
-                isMain = false
-                bottom_app_bar.navigationIcon = null
-                bottom_app_bar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
-                fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_back_fab))
-                bottom_app_bar.replaceMenu(R.menu.menu_bottom_bar_other_screen)
-            } else {
-                isMain = true
-                bottom_app_bar.navigationIcon =
-                    ContextCompat.getDrawable(context, R.drawable.ic_hamburger_menu_bottom_bar)
-                bottom_app_bar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
-                fab.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_plus_fab))
-                bottom_app_bar.replaceMenu(R.menu.menu_bottom_bar)
-            }
-        }
-    }
-
-    private fun setBottomSheetBehavior(bottomSheet: ConstraintLayout) {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-    }
-
-    private fun Fragment.toast(string: String?) {
-        Toast.makeText(context, string, Toast.LENGTH_SHORT).apply {
-            setGravity(Gravity.BOTTOM, 0, 250)
-            show()
-        }
-    }
-
-    companion object {
-        fun newInstance() = PictureOfTheDayFragment()
-        private var isMain = true
     }
 }

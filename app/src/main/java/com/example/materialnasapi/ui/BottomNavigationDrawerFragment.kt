@@ -55,4 +55,7 @@ class BottomNavigationDrawerFragment : BottomSheetDialogFragment() {
             true
         }
     }
+    companion object {
+        fun newInstance() = BottomNavigationDrawerFragment()
+    }
 }

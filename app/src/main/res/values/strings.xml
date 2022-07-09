@@ -18,5 +18,6 @@
     <string name="coordinator">coordinator</string>
     <string name="interesting_information">Полезная информация</string>
     <string name="additional_text">Дополнительный текст</string>
+    <string name="lorem">Sed ut perspiciatis, unde omnis iste natus.</string>
 
 </resources>

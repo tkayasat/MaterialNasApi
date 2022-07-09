@@ -13,7 +13,7 @@ import retrofit2.Response
 
 class PictureOfTheDayViewModel(
     private val liveDataForViewToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
-    private val retrofitImpl: PODRetrofitImpl = PODRetrofitImpl()
+    private val retrofitImpl: PODRetrofitImpl = PODRetrofitImpl(),
 ) :
     ViewModel() {
 
@@ -22,7 +22,7 @@ class PictureOfTheDayViewModel(
         return liveDataForViewToObserve
     }
 
-    private fun sendServerRequest() {
+    fun sendServerRequest() {
         liveDataForViewToObserve.value = PictureOfTheDayData.Loading(null)
         val apiKey: String = BuildConfig.NASA_API_KEY
         if (apiKey.isBlank()) {
@@ -37,7 +37,7 @@ class PictureOfTheDayViewModel(
         Callback<PODServerResponseData> {
         override fun onResponse(
             call: Call<PODServerResponseData>,
-            response: Response<PODServerResponseData>
+            response: Response<PODServerResponseData>,
         ) {
             if (response.isSuccessful && response.body() != null) {
                 liveDataForViewToObserve.value =
@@ -53,6 +53,7 @@ class PictureOfTheDayViewModel(
                 }
             }
         }
+
         override fun onFailure(call: Call<PODServerResponseData>, t: Throwable) {
             liveDataForViewToObserve.value = PictureOfTheDayData.Error(t)
         }
@@ -62,7 +63,7 @@ class PictureOfTheDayViewModel(
         Callback<List<SolarFlareResponseData>> {
         override fun onResponse(
             call: Call<List<SolarFlareResponseData>>,
-            response: Response<List<SolarFlareResponseData>>
+            response: Response<List<SolarFlareResponseData>>,
         ) {
             if (response.isSuccessful && response.body() != null) {
 
