@@ -7,7 +7,7 @@ import com.example.materialnasapi.R
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(App.instance.currentTheme)
+        setTheme(R.style.Theme_NasAPI_SplashScreen)
         setContentView(R.layout.activity_main)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

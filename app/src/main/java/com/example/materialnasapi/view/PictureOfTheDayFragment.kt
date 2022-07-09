@@ -7,7 +7,12 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.transition.ChangeBounds
+import android.transition.ChangeImageTransform
+import android.transition.TransitionManager
+import android.transition.TransitionSet
 import android.view.*
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -25,9 +30,12 @@ import com.example.materialnasapi.picture.PictureOfTheDayViewModel
 import com.example.materialnasapi.ui.BottomNavigationDrawerFragment
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.fragment_main.*
 
 
 class PictureOfTheDayFragment : Fragment() {
+
+    private var isExpanded = false
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
@@ -41,11 +49,14 @@ class PictureOfTheDayFragment : Fragment() {
         ViewModelProvider(this).get(PictureOfTheDayViewModel::class.java)
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
         _binding = FragmentMainStartBinding.inflate(inflater)
         setActionBar()
 
@@ -85,6 +96,7 @@ class PictureOfTheDayFragment : Fragment() {
                 binding.bottomAppBar.replaceMenu(R.menu.menu_bottom_bar)
             }
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -101,7 +113,29 @@ class PictureOfTheDayFragment : Fragment() {
         }
         bottomSheetBehavior = BottomSheetBehavior.from(binding.includeLayout.bottomSheetContainer)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        animationImage()
+
     }
+
+    private fun animationImage() {
+        image_view.setOnClickListener {
+            isExpanded = !isExpanded
+            TransitionManager.beginDelayedTransition(
+                main, TransitionSet()
+                    .addTransition(ChangeBounds())
+                    .addTransition(ChangeImageTransform())
+            )
+
+            val params: ViewGroup.LayoutParams = image_view.layoutParams
+            params.height = if (isExpanded) ViewGroup.LayoutParams.MATCH_PARENT else
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            image_view.layoutParams = params
+            image_view.scaleType =
+                if (isExpanded) ImageView.ScaleType.CENTER_CROP else
+                    ImageView.ScaleType.FIT_CENTER
+        }
+    }
+
 
     private fun renderData(data: AppState) {
         when (data) {
@@ -109,6 +143,7 @@ class PictureOfTheDayFragment : Fragment() {
                 Toast.makeText(context, "AppState error", Toast.LENGTH_LONG).show()
             }
             is AppState.Loading -> {
+
             }
             is AppState.Success -> {
                 binding.imageView.load(data.serverResponseData.url) {
@@ -123,10 +158,8 @@ class PictureOfTheDayFragment : Fragment() {
                         spannable.length,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
-                    binding.includeLayoutTv.textViewForFonts.text = it
+                    binding.includeLayoutTv.textViewForFonts.text = spannable
                 }
-             //   binding.includeLayoutTv.textViewForFonts.typeface =
-               //     Typeface.createFromAsset(requireContext().assets, "LongFox-o77A.ttf")
             }
         }
     }

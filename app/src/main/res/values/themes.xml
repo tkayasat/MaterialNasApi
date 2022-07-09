@@ -41,4 +41,8 @@
         name="MyBottomNavigationStyle" parent="@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface">
     </style>
 
+    <style name="Theme.NasAPI.SplashScreen">
+        <item name="android:windowBackground">@drawable/ic_drawable_screen</item>
+    </style>
+
 </resources>
